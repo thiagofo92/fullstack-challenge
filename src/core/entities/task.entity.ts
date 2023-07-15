@@ -1,5 +1,6 @@
 export interface TaskEntity {
   id: string
+  idUser: string
   title: string
   description: string
   status: TaskStatus
