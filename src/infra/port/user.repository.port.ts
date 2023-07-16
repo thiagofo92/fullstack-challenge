@@ -5,5 +5,8 @@ import { UserEntity } from 'src/core/entities/user.entity'
 
 export interface UserRepositoryPort {
   create: (inpu: UserEntity) => Promise<Either<Error, UserAppCreatedOutPutDto>>
-  validate: (email: string, password: string) => Promise<Either<UserRepositoryFailAuth, UserAppCreatedOutPutDto>>
+  validate: (
+    email: string,
+    password: string
+  ) => Promise<Either<UserRepositoryFailAuth | Error, UserAppCreatedOutPutDto>>
 }
