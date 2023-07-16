@@ -1,6 +1,5 @@
-export interface ArchiveEntity {
-  id: number
-  title: string
-  description: string
-  endDate: string
+import { TaskEntity } from './task.entity'
+
+export type ArchiveTaskEntity = TaskEntity & {
+  dateArchived: Date
 }
