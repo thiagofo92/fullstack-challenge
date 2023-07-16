@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { TaskAppDtoOutput, TaskCreateAppDtoOutput } from 'src/app/dto/task.app.dto'
+import { TaskAppListDtoOutput, TaskCreateAppDtoOutput } from 'src/app/dto/task.app.dto'
 import { TaskEntity } from 'src/core/entities/task.entity'
 import { TaskRepositoryPort } from 'src/infra/port'
 import { Either, left, right } from '../../../shared/error/either'
@@ -17,12 +17,12 @@ export class TaskMemoryRepository implements TaskRepositoryPort {
     return right({ id: input.id })
   }
 
-  async filter(idUser: string, status: string): Promise<Either<Error, TaskAppDtoOutput>> {
+  async filter(idUser: string, status: string): Promise<Either<Error, TaskAppListDtoOutput>> {
     const result = this.tasks.filter((item) => item.idUser === idUser && item.status === status)
     return right(result)
   }
 
-  async findByUserId(idUser: string): Promise<Either<Error, TaskAppDtoOutput | null>> {
+  async findByUserId(idUser: string): Promise<Either<Error, TaskAppListDtoOutput | null>> {
     const tasks = this.tasks.filter((item) => item.idUser === idUser)
 
     return right(tasks)
