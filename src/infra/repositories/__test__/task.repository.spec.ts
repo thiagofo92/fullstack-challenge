@@ -1,10 +1,10 @@
 import { describe, test, expect, jest } from '@jest/globals'
 import { TaskMemoryRepository } from '../memory'
 import { TaskRepositoryMock } from '../__mocks__/task.repository.mock'
-import { TaskCreateAppDtoOutput } from 'src/app/dto/task.app.dto'
-import { IdNotFound } from 'src/shared/error/not-found.error'
+import { TaskCreateAppDtoOutput } from '../../../app/dto/task.app.dto'
+import { IdNotFound } from '../../../shared/error/not-found.error'
 import { left, right } from '../../../shared/error/either'
-import { TaskStatus } from 'src/core/entities/task.entity'
+import { TaskStatus } from '../../../core/entities/task.entity'
 
 function FactoryRepository() {
   return new TaskMemoryRepository()
@@ -23,9 +23,10 @@ describe('# Task repository case', () => {
     const repository = FactoryRepository()
     const mock = TaskRepositoryMock()
 
+    jest.spyOn(repository, 'create').mockResolvedValueOnce(left(new Error('Teste error to create new task')))
     const taskCreated = await repository.create(mock)
 
-    expect(taskCreated.value).toStrictEqual(false)
+    expect(taskCreated.value).toBeInstanceOf(Error)
   })
 
   test('Update a task by ID', async () => {
@@ -99,7 +100,7 @@ describe('# Task repository case', () => {
     const repository = FactoryRepository()
 
     const result = await repository.findByUserId('')
-    expect(result.value).toBeNull()
+    expect(result.value).toStrictEqual([])
   })
 
   test('Error to find the task by user ID', async () => {
@@ -108,7 +109,7 @@ describe('# Task repository case', () => {
     jest.spyOn(repository, 'findByUserId').mockResolvedValueOnce(left(new Error('Test - Error to find task')))
 
     const result = await repository.findByUserId('')
-    expect(result.value).toStrictEqual(false)
+    expect(result.value).toBeInstanceOf(Error)
   })
 
   test('Filter the task from user by status', async () => {
@@ -121,19 +122,19 @@ describe('# Task repository case', () => {
     expect(result.value).not.toBeNull()
   })
 
-  test('User dont has task', async () => {
+  test('User dont has task - with inputed status', async () => {
     const repository = FactoryRepository()
 
     const result = await repository.filter('', '')
-    expect(result.value).toBeNull()
+    expect(result.value).toStrictEqual([])
   })
 
-  test('Error to find the task by user ID', async () => {
+  test('Error to filter the task by user ID', async () => {
     const repository = FactoryRepository()
 
     jest.spyOn(repository, 'filter').mockResolvedValueOnce(left(new Error('Test - Error to find task')))
 
     const result = await repository.filter('', '')
-    expect(result.value).toStrictEqual(false)
+    expect(result.value).toBeInstanceOf(Error)
   })
 })
