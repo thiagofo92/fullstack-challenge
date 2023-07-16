@@ -1,10 +1,9 @@
 import { UserAppCreatedOutPutDto } from 'src/app/dto'
 import { Either } from 'src/shared/error/either'
 import { UserRepositoryFailAuth } from '../repositories/errors'
+import { UserEntity } from 'src/core/entities/user.entity'
 
 export interface UserRepositoryPort {
-  create: () => Promise<Either<Error, UserAppCreatedOutPutDto>>
-  validate: () => Promise<
-    Either<UserRepositoryFailAuth, UserAppCreatedOutPutDto>
-  >
+  create: (inpu: UserEntity) => Promise<Either<Error, UserAppCreatedOutPutDto>>
+  validate: (email: string, password: string) => Promise<Either<UserRepositoryFailAuth, UserAppCreatedOutPutDto>>
 }
