@@ -2,8 +2,8 @@ import { randomUUID } from 'crypto'
 import { TaskAppDtoOutput, TaskCreateAppDtoOutput } from 'src/app/dto/task.app.dto'
 import { TaskEntity } from 'src/core/entities/task.entity'
 import { TaskRepositoryPort } from 'src/infra/port'
-import { Either, left, right } from 'src/shared/error/either'
-import { IdNotFound } from 'src/shared/error/not-found.error'
+import { Either, left, right } from '../../../shared/error/either'
+import { IdNotFound } from '../../../shared/error/not-found.error'
 
 export class TaskMemoryRepository implements TaskRepositoryPort {
   private readonly tasks: Array<TaskEntity> = []
