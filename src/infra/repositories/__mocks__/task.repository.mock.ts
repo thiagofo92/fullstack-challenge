@@ -1,4 +1,4 @@
-import { TaskEntity, TaskStatus } from 'src/core/entities/task.entity'
+import { TaskEntity, TaskStatus } from '../../../core/entities/task.entity'
 import { faker } from '@faker-js/faker'
 import { randomUUID } from 'crypto'
 export function TaskRepositoryMock(): TaskEntity {
