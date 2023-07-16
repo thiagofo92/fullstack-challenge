@@ -2,7 +2,7 @@ import { describe, test, jest, expect } from '@jest/globals'
 import { UserMemoryRepository } from '../memory/user.memroy.repository'
 import { UserRepositoryPort } from 'src/infra/port'
 import { UserRepositoryFailAuth } from '../errors'
-import { UserRepositoryMock } from '../__mocks__'
+import { UserRepositoryMock } from '../__mocks__/user.repository.mock'
 import { left } from '../../../shared/error/either'
 
 function FactoryRepository(): UserRepositoryPort {

@@ -67,7 +67,7 @@ describe('# Task repository case', () => {
     const value = taskCreated.value as TaskCreateAppDtoOutput
     const result = await repository.delete(value.id)
 
-    expect(result.value).toStrictEqual(true)
+    expect(result.value).toStrictEqual(mock)
   })
 
   test('Error to found ID for delete', async () => {
@@ -80,10 +80,10 @@ describe('# Task repository case', () => {
   test('Error to update the task', async () => {
     const repository = FactoryRepository()
 
-    jest.spyOn(repository, 'delete').mockResolvedValueOnce(right(false))
+    jest.spyOn(repository, 'delete').mockResolvedValueOnce(left(new Error('Test delte the task')))
 
     const result = await repository.delete('')
-    expect(result.value).toStrictEqual(false)
+    expect(result.value).toBeInstanceOf(Error)
   })
 
   test('Find all task from user using idUser', async () => {

@@ -17,7 +17,7 @@ export class UserMemoryRepository implements UserRepositoryPort {
 
   async validate(
     email: string,
-    password: string
+    password: string,
   ): Promise<Either<Error | UserRepositoryFailAuth, UserAppCreatedOutPutDto>> {
     const user = this.users.find((item) => item.email === email && item.password === password)
 
