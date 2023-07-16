@@ -1,8 +1,8 @@
-import { TaskEntity } from 'src/core/entities/task.entity'
-import { Either, left, right } from 'src/shared/error/either'
+import { TaskEntity } from '../../core/entities/task.entity'
+import { Either, left, right } from '../../shared/error/either'
 import { TaskCreateAppDtoOutput, TaskAppListDtoOutput, TaskAppDtoInput, TaskAppDtoOutput } from '../dto'
 import { TaskUseCasePort } from '../port'
-import { TaskRepositoryPort } from 'src/infra/port'
+import { TaskRepositoryPort } from '../../infra/port'
 
 export class TaskUseCase implements TaskUseCasePort {
   constructor(private readonly repository: TaskRepositoryPort) {}

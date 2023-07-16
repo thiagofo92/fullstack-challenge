@@ -1,8 +1,8 @@
-import { UserRepositoryFailAuth } from 'src/infra/repositories/errors'
-import { Either, left, right } from 'src/shared/error/either'
+import { UserRepositoryFailAuth } from '../../infra/repositories/errors'
+import { Either, left, right } from '../../shared/error/either'
 import { UserAppCreatedOutPutDto, UserAppInPutDto } from '../dto'
 import { UserUseCasePort } from '../port'
-import { UserRepositoryPort } from 'src/infra/port'
+import { UserRepositoryPort } from '../../infra/port'
 
 export class UserUseCase implements UserUseCasePort {
   constructor(private readonly repository: UserRepositoryPort) {}
@@ -17,7 +17,7 @@ export class UserUseCase implements UserUseCasePort {
 
   async validate(
     email: string,
-    password: string
+    password: string,
   ): Promise<Either<Error | UserRepositoryFailAuth, UserAppCreatedOutPutDto>> {
     const result = await this.repository.validate(email, password)
 

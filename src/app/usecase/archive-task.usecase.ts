@@ -1,13 +1,13 @@
-import { ArchiveTaskEntity } from 'src/core/entities/archive-task.entity'
-import { Either, left, right } from 'src/shared/error/either'
+import { ArchiveTaskEntity } from '../../core/entities/archive-task.entity'
+import { Either, left, right } from '../../shared/error/either'
 import { ArchiveTaskAppOutputDto } from '../dto'
 import { ArchiveTaskUseCasePort } from '../port'
-import { ArchiveTaskRepositoryPort, TaskRepositoryPort } from 'src/infra/port'
+import { ArchiveTaskRepositoryPort, TaskRepositoryPort } from '../../infra/port'
 
 export class ArchiveTaskUseCase implements ArchiveTaskUseCasePort {
   constructor(
     private readonly repositoryArchiveTask: ArchiveTaskRepositoryPort,
-    private readonly repositoryTask: TaskRepositoryPort
+    private readonly repositoryTask: TaskRepositoryPort,
   ) {}
 
   async create(idTask: string): Promise<Either<Error, boolean>> {
