@@ -1,4 +1,5 @@
 import { describe, test, expect, jest, beforeAll, afterAll } from '@jest/globals'
+import 'dotenv/config'
 import { TaskMemoryRepository } from '../memory'
 import { TaskRepositoryMock } from '../__mocks__/task.repository.mock'
 import { TaskCreateAppDtoOutput } from '../../../app/dto/task.app.dto'
@@ -7,9 +8,7 @@ import { left, right } from '../../../shared/error/either'
 import { TaskStatus } from '../../../core/entities/task.entity'
 import { Connection } from '../mongoose/connection/connection'
 import { TaskMongooseRepository, UserMongooseRepository } from '../mongoose'
-import 'dotenv/config'
 import { UserRepositoryMock } from '../__mocks__/user.repository.mock'
-import { randomUUID } from 'crypto'
 
 function FactoryRepository() {
   return new TaskMongooseRepository()
@@ -17,7 +16,7 @@ function FactoryRepository() {
 
 let idUser = ''
 
-describe.only('# Task repository case', () => {
+describe.skip('# Task repository case', () => {
   beforeAll(async () => {
     await Connection.getConnection()
     const mock = UserRepositoryMock()

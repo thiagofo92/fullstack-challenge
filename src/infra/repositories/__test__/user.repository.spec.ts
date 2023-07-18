@@ -1,4 +1,5 @@
 import { describe, test, jest, expect } from '@jest/globals'
+import 'dotenv/config'
 import { UserMemoryRepository } from '../memory/user.memroy.repository'
 import { UserRepositoryPort } from 'src/infra/port'
 import { UserRepositoryFailAuth } from '../errors'
@@ -6,7 +7,6 @@ import { UserRepositoryMock } from '../__mocks__/user.repository.mock'
 import { left } from '../../../shared/error/either'
 import { UserMongooseRepository } from '../mongoose'
 import { Connection } from '../mongoose/connection/connection'
-import 'dotenv/config'
 
 function FactoryRepository(): UserRepositoryPort {
   // return new UserMemoryRepository()

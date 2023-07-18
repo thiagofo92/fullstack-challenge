@@ -1,5 +1,6 @@
 import { describe, jest, test, expect } from '@jest/globals'
-import { ArchiveTaskRepositoryPort } from 'src/infra/port'
+import 'dotenv/config'
+import { ArchiveTaskRepositoryPort } from '../../../infra/port'
 import { ArchiveTaskMemoryRepository } from '../memory'
 import { ArchiveTaskRepositoryMock } from '../__mocks__/archive-task.repository.mock'
 import { left, right } from '../../../shared/error/either'
