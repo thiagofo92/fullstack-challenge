@@ -6,11 +6,12 @@ import { ArchiveTaskUseCase } from '../usecase'
 import { TaskRepositoryMock } from '../../infra/repositories/__mocks__/task.repository.mock'
 import { TaskAppDtoOutput } from '../dto'
 import { IdNotFound } from '../../shared/error/not-found.error'
+import { LoggerMock } from '../__mocks__/logger.usecase.mock'
 
 function FactoryUseCase() {
   const repositoryArchive = new ArchiveTaskMemoryRepository()
   const repositoryTask = new TaskMemoryRepository()
-  const usecase = new ArchiveTaskUseCase(repositoryArchive, repositoryTask)
+  const usecase = new ArchiveTaskUseCase(repositoryArchive, repositoryTask, LoggerMock)
   return { usecase, repositoryArchive, repositoryTask }
 }
 

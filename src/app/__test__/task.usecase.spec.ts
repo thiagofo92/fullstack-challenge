@@ -6,10 +6,11 @@ import { left, right } from '../../shared/error/either'
 import { TaskStatus } from '../../core/entities/task.entity'
 import { TaskCreateAppDtoOutput } from '../dto'
 import { TaskUseCase } from '../usecase'
+import { LoggerMock } from '../__mocks__/logger.usecase.mock'
 
 function FactoryUseCase() {
   const repository = new TaskMemoryRepository()
-  const usecase = new TaskUseCase(repository)
+  const usecase = new TaskUseCase(repository, LoggerMock)
   return { usecase, repository }
 }
 

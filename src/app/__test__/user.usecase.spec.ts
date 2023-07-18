@@ -4,10 +4,11 @@ import { UserUseCase } from '../usecase'
 import { UserUseCaseMock } from '../__mocks__/user.usecase.mock'
 import { left } from '../../shared/error/either'
 import { UserRepositoryFailAuth } from '../../infra/repositories/errors'
+import { LoggerMock } from '../__mocks__/logger.usecase.mock'
 
 function FactoryUsecase() {
   const repository = new UserMemoryRepository()
-  const usecase = new UserUseCase(repository)
+  const usecase = new UserUseCase(repository, LoggerMock)
   return { repository, usecase }
 }
 
