@@ -42,7 +42,7 @@ export class TaskUpdateValidationInputDto {
   @IsNotEmpty()
   description: string
 
-  @ApiProperty()
+  @ApiProperty({ enum: [TaskStatus.TODO, TaskStatus.DOING, TaskStatus.DONE] })
   @IsNotEmpty()
   @IsEnum(TaskStatus)
   status: TaskStatus
