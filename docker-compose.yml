@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    restart: unless-stopped
+    env_file: ./.env.prod
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$DATA BASE_USER
+      - MONGO_INITDB_ROOT_PASSWORD=$DATABASE_PASSWORD
+    ports:
+      - 27017:27017
+  api:
+    env_file: ./.env.prod
+    build: .
+    container_name: manager-task
+    links:
+      - "mongodb:mongodb"
+    ports:
+      - 3000:3000
+    
