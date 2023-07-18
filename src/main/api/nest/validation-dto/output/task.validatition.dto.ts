@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { TaskStatus } from 'src/core/entities/task.entity'
+import { TaskStatus } from '../../../../../core/entities/task.entity'
 
 export class TaskCreatedOutPutDto {
   @ApiProperty()
