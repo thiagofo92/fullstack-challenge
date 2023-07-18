@@ -9,9 +9,9 @@ import {
 } from '../../validation-dto/input'
 import { AuthGuard } from '../../guard/auth.guard'
 import { Request, Response } from 'express'
-import { HttpDataResponse } from 'src/main/api/util/http-data-response'
-import { HTTP_STATUS } from 'src/main/api/util/http-status'
-import { IdNotFound } from 'src/shared/error/not-found.error'
+import { HttpDataResponse } from '../../../../../main/api/util/http-data-response'
+import { HTTP_STATUS } from '../../../../../main/api/util/http-status'
+import { IdNotFound } from '../../../../../shared/error/not-found.error'
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,

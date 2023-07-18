@@ -1,5 +1,5 @@
 import { Controller, Post, Get, Body, Query, UseGuards, Res, Req, Logger } from '@nestjs/common'
-import { ArchiveTaskUseCasePort } from 'src/app/port'
+import { ArchiveTaskUseCasePort } from '../../../../../app/port'
 import { ArchiveTaskFindByUserIdValidationInputDto, ArchiveTaskValidationInputDto } from '../../validation-dto/input'
 import { AuthGuard } from '../../guard/auth.guard'
 import { HttpDataResponse } from '../../../../../main/api/util/http-data-response'
