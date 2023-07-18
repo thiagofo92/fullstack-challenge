@@ -3,10 +3,10 @@ import { Either } from 'src/shared/error/either'
 import { UserRepositoryFailAuth } from '../repositories/errors'
 import { UserEntity } from 'src/core/entities/user.entity'
 
-export interface UserRepositoryPort {
+export abstract class UserRepositoryPort {
   create: (inpu: UserEntity) => Promise<Either<Error, UserAppCreatedOutPutDto>>
   validate: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<Either<UserRepositoryFailAuth | Error, UserAppCreatedOutPutDto>>
 }

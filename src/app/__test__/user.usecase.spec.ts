@@ -19,6 +19,7 @@ describe('# User usecase - case test', () => {
     const result = await usecase.create(mock)
 
     expect(result.value).toHaveProperty('id')
+    expect(result.value.name).toStrictEqual(mock.name)
   })
 
   test('Error to create a new user', async () => {

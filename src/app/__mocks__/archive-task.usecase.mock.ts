@@ -3,8 +3,9 @@ import { randomUUID } from 'crypto'
 import { TaskStatus } from '../../core/entities/task.entity'
 import { faker } from '@faker-js/faker'
 
-export function ArchiveTaskUseCaseMock(): ArchiveTaskAppInputDto {
+export function ArchiveTaskUseCaseMock(idTask: string = randomUUID()): ArchiveTaskAppInputDto {
   return {
+    idTask,
     idUser: randomUUID(),
     title: faker.commerce.product(),
     status: TaskStatus.DONE,

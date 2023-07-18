@@ -12,7 +12,7 @@ export class UserMemoryRepository implements UserRepositoryPort {
     input.id = randomUUID()
     this.users.push(input)
 
-    return right({ id: input.id })
+    return right({ id: input.id, name: input.name })
   }
 
   async validate(
@@ -23,6 +23,6 @@ export class UserMemoryRepository implements UserRepositoryPort {
 
     if (!user) return left(new UserRepositoryFailAuth())
 
-    return right({ id: user.id })
+    return right({ id: user.id, name: user.name })
   }
 }

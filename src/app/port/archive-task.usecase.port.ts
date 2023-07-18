@@ -1,7 +1,8 @@
 import { Either } from 'src/shared/error/either'
-import { ArchiveTaskAppInputDto, ArchiveTaskAppOutputDto } from '../dto'
+import { ArchiveTaskAppOutputDto } from '../dto'
+import { IdNotFound } from 'src/shared/error/not-found.error'
 
-export interface ArchiveTaskUseCasePort {
-  create: (idTask: string) => Promise<Either<Error, boolean>>
+export abstract class ArchiveTaskUseCasePort {
+  create: (idTask: string) => Promise<Either<Error | IdNotFound, boolean>>
   findByUserId: (idUser: string) => Promise<Either<Error, ArchiveTaskAppOutputDto>>
 }

@@ -4,4 +4,5 @@ export type UserAppInPutDto = UserEntity
 export type UserAppOutPutDto = UserEntity
 export type UserAppCreatedOutPutDto = {
   id: string
+  name: string
 }

@@ -1,19 +1,39 @@
-import { describe, test, expect, jest } from '@jest/globals'
+import { describe, test, expect, jest, beforeAll, afterAll } from '@jest/globals'
 import { TaskMemoryRepository } from '../memory'
 import { TaskRepositoryMock } from '../__mocks__/task.repository.mock'
 import { TaskCreateAppDtoOutput } from '../../../app/dto/task.app.dto'
 import { IdNotFound } from '../../../shared/error/not-found.error'
 import { left, right } from '../../../shared/error/either'
 import { TaskStatus } from '../../../core/entities/task.entity'
+import { Connection } from '../mongoose/connection/connection'
+import { TaskMongooseRepository, UserMongooseRepository } from '../mongoose'
+import 'dotenv/config'
+import { UserRepositoryMock } from '../__mocks__/user.repository.mock'
+import { randomUUID } from 'crypto'
 
 function FactoryRepository() {
-  return new TaskMemoryRepository()
+  return new TaskMongooseRepository()
 }
 
-describe('# Task repository case', () => {
+let idUser = ''
+
+describe.only('# Task repository case', () => {
+  beforeAll(async () => {
+    await Connection.getConnection()
+    const mock = UserRepositoryMock()
+    const user = new UserMongooseRepository()
+
+    const result = await user.create(mock)
+    const value = result.value as { id: string }
+    idUser = value.id
+  })
+
+  afterAll(async () => {
+    await Connection.closeConnection()
+  })
   test('Create a new task', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     const taskCreated = await repository.create(mock)
     expect(taskCreated.value).toHaveProperty('id')
@@ -21,7 +41,7 @@ describe('# Task repository case', () => {
 
   test('Error to create a new task', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     jest.spyOn(repository, 'create').mockResolvedValueOnce(left(new Error('Teste error to create new task')))
     const taskCreated = await repository.create(mock)
@@ -31,7 +51,7 @@ describe('# Task repository case', () => {
 
   test('Update a task by ID', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     const taskCreated = await repository.create(mock)
     const value = taskCreated.value as TaskCreateAppDtoOutput
@@ -43,7 +63,7 @@ describe('# Task repository case', () => {
 
   test('Error to found ID for update', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     const result = await repository.update(mock)
     expect(result.value).toBeInstanceOf(IdNotFound)
@@ -51,7 +71,7 @@ describe('# Task repository case', () => {
 
   test('Error to update the task', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     jest.spyOn(repository, 'update').mockResolvedValueOnce(right(false))
 
@@ -61,19 +81,19 @@ describe('# Task repository case', () => {
 
   test('Delete task by ID', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     const taskCreated = await repository.create(mock)
-    const value = taskCreated.value as TaskCreateAppDtoOutput
-    const result = await repository.delete(value.id)
-
+    const task = taskCreated.value as TaskCreateAppDtoOutput
+    const result = await repository.delete(task.id)
+    mock.id = task.id
     expect(result.value).toStrictEqual(mock)
   })
 
   test('Error to found ID for delete', async () => {
     const repository = FactoryRepository()
 
-    const result = await repository.delete('')
+    const result = await repository.delete('64b4a1bd8f02e013b2c32548')
     expect(result.value).toBeInstanceOf(IdNotFound)
   })
 
@@ -88,7 +108,7 @@ describe('# Task repository case', () => {
 
   test('Find all task from user using idUser', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     await repository.create(mock)
     const result = await repository.findByUserId(mock.idUser)
@@ -99,7 +119,7 @@ describe('# Task repository case', () => {
   test('User dont has task', async () => {
     const repository = FactoryRepository()
 
-    const result = await repository.findByUserId('')
+    const result = await repository.findByUserId('64b4a1bd79d949d4767a8b57')
     expect(result.value).toStrictEqual([])
   })
 
@@ -114,7 +134,7 @@ describe('# Task repository case', () => {
 
   test('Filter the task from user by status', async () => {
     const repository = FactoryRepository()
-    const mock = TaskRepositoryMock()
+    const mock = TaskRepositoryMock(idUser)
 
     await repository.create(mock)
     const result = await repository.filter(mock.idUser, TaskStatus.TODO)
@@ -125,7 +145,7 @@ describe('# Task repository case', () => {
   test('User dont has task - with inputed status', async () => {
     const repository = FactoryRepository()
 
-    const result = await repository.filter('', '')
+    const result = await repository.filter('64b4a1bd79d949d4767a8b57', 'NOT')
     expect(result.value).toStrictEqual([])
   })
 

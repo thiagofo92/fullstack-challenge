@@ -1,7 +1,7 @@
 import { Either } from 'src/shared/error/either'
 import { TaskAppDtoInput, TaskAppDtoOutput, TaskAppListDtoOutput, TaskCreateAppDtoOutput } from '../dto'
 
-export interface TaskUseCasePort {
+export abstract class TaskUseCasePort {
   create: (input: TaskAppDtoInput) => Promise<Either<Error, TaskCreateAppDtoOutput>>
   filter: (idUser: string, status: string) => Promise<Either<Error, TaskAppListDtoOutput>>
   findByUserId: (idUser: string) => Promise<Either<Error, TaskAppListDtoOutput | null>>

@@ -28,7 +28,7 @@ export class TaskMemoryRepository implements TaskRepositoryPort {
     return right(tasks)
   }
 
-  async delete(id: string): Promise<Either<Error, TaskAppDtoOutput>> {
+  async delete(id: string): Promise<Either<Error | IdNotFound, TaskAppDtoOutput>> {
     const index = this.tasks.findIndex((item) => item.id === id)
 
     if (index < 0) return left(new IdNotFound(this.messageTaskIDNotFound))
@@ -38,7 +38,7 @@ export class TaskMemoryRepository implements TaskRepositoryPort {
     return right(result)
   }
 
-  async update(input: TaskEntity): Promise<Either<Error, boolean>> {
+  async update(input: TaskEntity): Promise<Either<Error | IdNotFound, boolean>> {
     const index = this.tasks.findIndex((item) => item.id === input.id)
 
     if (index < 0) return left(new IdNotFound(this.messageTaskIDNotFound))
