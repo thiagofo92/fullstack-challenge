@@ -6,6 +6,8 @@ import { WinstonOptions } from '../../../shared/logger/logger'
 import { WinstonModule } from 'nest-winston'
 import { Connection } from '../../../infra/repositories/mongoose/connection/connection'
 import helmet from 'helmet'
+import { SwaggerModule } from '@nestjs/swagger'
+import { documentConfig } from './config/document.swagger'
 
 const logger = WinstonModule.createLogger(WinstonOptions)
 
@@ -15,6 +17,9 @@ export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger,
   })
+
+  const document = SwaggerModule.createDocument(app, documentConfig)
+  SwaggerModule.setup('api', app, document)
 
   app.use(helmet())
   app.useGlobalPipes(new ValidationPipe())
