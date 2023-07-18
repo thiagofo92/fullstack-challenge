@@ -1,9 +1,12 @@
 import { Controller, Get } from '@nestjs/common'
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
-@Controller()
+@ApiTags('Test')
+@Controller('test')
 export class AppController {
-  @Get()
-  getHello(): string {
-    return 'Success'
+  @Get('ping')
+  @ApiOkResponse({ description: 'API comunicando' })
+  ping(): string {
+    return 'pong'
   }
 }
