@@ -2,11 +2,21 @@ import { Body, Controller, Post, Res, HttpCode, Logger, InternalServerErrorExcep
 import { JwtService } from '@nestjs/jwt'
 import { Response } from 'express'
 import { UserUseCasePort } from '../../../../../app/port'
-import { UserAuthValidationDto, UserValidationDto } from '../../validation-dto'
+import { UserAuthValidationInputDto, UserValidationInputDto } from '../../validation-dto/input'
+import { UserTokenAccessOutputDto } from '../../validation-dto/output'
 import { HTTP_STATUS } from '../../../util/http-status'
 import { HttpDataResponse } from '../../../util/http-data-response'
 import { UserRepositoryFailAuth } from '../../../../../infra/repositories/errors'
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger'
 
+@ApiTags('User')
 @Controller('users')
 export class UsersController {
   private readonly secretJwt = process.env.TOKEN_JWT
@@ -18,20 +28,25 @@ export class UsersController {
   ) {}
 
   @Post()
-  async create(@Body() userDto: UserValidationDto, @Res() res: Response) {
+  @ApiCreatedResponse({ description: 'Usuário criado com sucesso', type: UserTokenAccessOutputDto })
+  @ApiBadRequestResponse({ description: 'Parâmetro(s) inválido' })
+  @ApiInternalServerErrorResponse({ description: 'Error interno' })
+  async create(@Body() userDto: UserValidationInputDto, @Res() res: Response) {
     this.logger.log(`Start to create a new user: ${userDto.name}`)
     const result = await this.usecase.create(userDto)
 
     if (result.isLeft()) {
       this.logger.error(`Error to create a user message: ${result.value.message}`)
       const error = this.checkError(result.value)
-      return res.status(error.statusCode).json(error.message)
+      res.status(error.statusCode).json(error.message)
+      return
     }
 
     try {
       const payload = { sub: result.value.id, username: result.value.name }
       const token = await this.jwt.signAsync(payload, { secret: this.secretJwt })
-      return res.status(HTTP_STATUS.OK).json({ token })
+      res.status(HTTP_STATUS.OK).json({ id: result.value.id, token, name: result.value.name })
+      return
     } catch (error) {
       this.logger.error(error)
       throw new InternalServerErrorException()
@@ -40,19 +55,26 @@ export class UsersController {
 
   @Post('/validation')
   @HttpCode(200)
-  async validation(@Body() { email, password }: UserAuthValidationDto, @Res() res: Response) {
+  @ApiOkResponse({ description: 'Sucesso ao validar o usuário', type: UserTokenAccessOutputDto })
+  @ApiBadRequestResponse({ description: 'Parâmetro(s) inválido' })
+  @ApiUnauthorizedResponse({ description: 'Email ou senha invalido' })
+  @ApiInternalServerErrorResponse({ status: 500, description: 'Error interno' })
+  async validation(@Body() { email, password }: UserAuthValidationInputDto, @Res() res: Response) {
     this.logger.log(`Start to auth the user`)
     const result = await this.usecase.validate(email, password)
 
     if (result.isLeft()) {
       const error = this.checkError(result.value)
-      return res.status(error.statusCode).json(error.message)
+      res.status(error.statusCode).json(error.message)
+      return
     }
 
     try {
       const payload = { sub: result.value.id, username: result.value.name }
       const token = await this.jwt.signAsync(payload, { secret: this.secretJwt })
-      return res.status(HTTP_STATUS.OK).json({ token })
+
+      res.status(HTTP_STATUS.OK).json({ id: result.value.id, token, name: result.value.name })
+      return
     } catch (error) {
       this.logger.error(error)
       throw new InternalServerErrorException()
